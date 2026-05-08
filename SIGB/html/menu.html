@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #1098F7;">
+  <div class="container-fluid">
+    {% url 'core_app:dashboard' as dashboard_url %}
+    <a class="navbar-brand" href="{{ dashboard_url }}" style="color: white">SIGB</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          {% url 'core_app:dashboard' as dashboard_url %}
+          <a class="nav-link" href="{{ dashboard_url }}" style="color: white">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          {% url 'core_app:bombeiros' as bombeiros_url %}
+          <a class="nav-link" href="{{ bombeiros_url }}" style="color: white">Bombeiros</a>
+        </li>
+        <li class="nav-item">
+          {% url 'core_app:viaturas' as viaturas_url %}
+          <a class="nav-link" href="{{ viaturas_url }}" style="color: white">Viaturas</a>
+        </li>
+        <li class="nav-item">
+          {% url 'core_app:manutencoes' as manutencoes_url %}
+          <a class="nav-link" href="{{ manutencoes_url }}" style="color: white">Manutenções</a>
+        </li>
+        <li class="nav-item">
+          {% url 'core_app:agenda' as agenda_url %}
+          <a class="nav-link" href="{{ agenda_url }}" style="color: white">Agenda</a>
+        </li>
+        <li class="nav-item">
+          {% url 'core_app:historico' as historico_url %}
+          <a class="nav-link" href="{{ historico_url }}" style="color: white">Histórico</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

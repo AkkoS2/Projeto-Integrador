@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Bombeiros - SIGB{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-center w-100">Lista de Bombeiros</h3>
+        <span class="badge badge-primary">{{ lista|length }} Integrantes</span>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover shadow-sm border">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nome Completo</th>
+                    <th>Patente</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in lista %}
+                <tr>
+                    <td class="align-middle">{{ b.nome_completo }}</td>
+                    <td class="align-middle">
+                        <span class="badge" style="color:black;">
+                            {{ b.patente.nome }}
+                        </span>
+                    </td>
+                    
+                    <td class="text-center align-middle">
+                        <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#perfilModal{{ b.id }}" style="background-color: #1098F7; color:white">
+                            <i class="fas fa-id-card"></i> Ver Perfil Completo
+                        </button>
+                    </td>
+                </tr>
+
+                <div class="modal fade" id="perfilModal{{ b.id }}" tabindex="-1" role="dialog" aria-labelledby="label{{ b.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #1098F7; color:white">
+                                <h5 class="modal-title" id="label{{ b.id }}">
+                                    Ficha Individual: {{ b.nome_completo }}
+                                </h5>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-muted border-bottom pb-2">Dados Pessoais</h6>
+                                        <p><strong>Nome:</strong> {{ b.nome_completo }}</p>
+                                        <p><strong>CPF:</strong> {{ b.cpf }}</p>
+                                        <p><strong>Tipo Sanguíneo:</strong> {{ b.tipo_sanguineo }}</p>
+                                        <p><strong>E-mail:</strong> {{ b.email }}</p>
+                                    </div>
+                                    <div class="col-md-6 border-left">
+                                        <h6 class="text-muted border-bottom pb-2">Informações Militares</h6>
+                                        <p><strong>Patente:</strong> {{ b.patente.nome }}</p>
+                                        <p><strong>Data de Ingresso:</strong> {{ b.data_ingresso|date:"d/m/Y" }}</p>
+                                        <p><strong>Perfil de Sistema:</strong> {{ b.perfil.nivel }}</p>
+                                        <p><strong>Status Atual:</strong> 
+                                            <span class="badge {% if b.status == 'Ativo' %}badge-success{% else %}badge-warning{% endif %}" style="color:black">
+                                                {{ b.status }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <p class="bg-light p-2 rounded">
+                                            <strong>Telefone de Contato:</strong> {{ b.telefone }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-dismiss="modal" style="background-color: #CA2E55; color:white">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">Nenhum bombeiro cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
