@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Escalas - SIGB{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-center w-100"><i class="fas fa-layer-group"></i> Escalas de Serviço</h3>
+    </div>
+
+    <div class="row">
+        {% for e in escala %} <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0 text-center">{{ e.nome }}</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="mb-3 text-center">
+                        <small class="text-muted d-block">PERÍODO</small>
+                        <strong>{{ e.data_inicio|date:"d/m/Y" }}</strong> até
+                        <strong>{{ e.data_fim|date:"d/m/Y" }}</strong>
+                    </div>
+
+                    <hr>
+
+                    <h6><i class="fas fa-users text-danger"></i> Equipe Escalada:</h6>
+                    <ul class="list-group list-group-flush">
+                        {% for vinculo in e.escalabombeiro_set.all %}
+                        <li class="list-group-item px-0 py-1 border-0">
+                            <i class="fas fa-user-check text-success mr-2"></i>
+                            {{ vinculo.bombeiro.nome_completo }}
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item px-0 py-1 border-0 text-muted">
+                            Nenhum bombeiro vinculado.
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card-footer bg-white border-top-0">
+                    <button type="button" class="btn btn-outline-danger btn-block btn-sm" data-toggle="modal"
+                        data-target="#modalEscala{{ e.id }}">
+                        <i class="fas fa-info-circle"></i> Detalhes e Descrição
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalEscala{{ e.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title">Ficha da Escala: {{ e.nome }}</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h6><strong><i class="fas fa-align-left text-primary"></i> Descrição / Observações:</strong>
+                        </h6>
+                        <div class="p-3 bg-light rounded mb-4">
+                            {{ e.descricao|default:"Nenhuma observação cadastrada."|linebreaks }}
+                        </div>
+
+                        <h6><strong><i class="fas fa-clipboard-list text-primary"></i> Lista Completa de
+                                Participantes:</strong></h6>
+                        <table class="table table-sm mt-2">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Nome do Bombeiro</th>
+                                    <th>Patente</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vinculo in e.escalabombeiro_set.all %}
+                                <tr>
+                                    <td>{{ vinculo.bombeiro.nome_completo }}</td>
+                                    <td>
+                                        <span class="badge badge-light border text-dark">
+                                            {{ vinculo.bombeiro.patente.nome }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">Não existem escalas cadastradas.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

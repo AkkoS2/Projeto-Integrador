@@ -28,8 +28,10 @@
                         placeholder="Ex: Nome, Placa, Título..." value="{{ busca_texto|default:'' }}">
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn mt-3" style="background-color:#1098F7; color:white">Filtrar</button>
-                    <a href="{% url 'core_app:historico' %}" class="btn mt-3" style="background-color: #CA2E55; color:white">Limpar</a>
+                    <button type="submit" class="btn mt-3"
+                        style="background-color:#1098F7; color:white">Filtrar</button>
+                    <a href="{% url 'core_app:historico' %}" class="btn mt-3"
+                        style="background-color: #CA2E55; color:white">Limpar</a>
                 </div>
             </form>
         </div>

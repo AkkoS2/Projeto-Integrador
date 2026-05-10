@@ -1,7 +1,7 @@
 from .forms import FormBombeiro
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Bombeiro, Viatura, Ocorrencia, Manutencao, Escala, Evento, Treinamento, Patente, TipoEvento
+from .models import Bombeiro, Viatura, Ocorrencia, Manutencao, Escala, Evento, Treinamento, Patente, TipoEvento, EscalaBombeiro
 
 
 def dashboard(request):
@@ -132,3 +132,10 @@ def manutencoes(request):
 
 def viaturas(request):
     return render(request, "viaturas.html")
+
+
+def escalas(request):
+
+    escalas = Escala.objects.all().prefetch_related('escalabombeiro_set__bombeiro')
+
+    return render(request, "escala.html", {'escala' : escalas})

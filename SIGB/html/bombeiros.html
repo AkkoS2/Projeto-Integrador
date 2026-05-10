@@ -8,7 +8,7 @@
         <h3 class="text-center w-100">Lista de Bombeiros</h3>
         <span class="badge badge-primary">{{ lista|length }} Integrantes</span>
     </div>
-    
+
     <div class="table-responsive">
         <table class="table table-hover shadow-sm border">
             <thead class="thead-dark">
@@ -27,15 +27,17 @@
                             {{ b.patente.nome }}
                         </span>
                     </td>
-                    
+
                     <td class="text-center align-middle">
-                        <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#perfilModal{{ b.id }}" style="background-color: #1098F7; color:white">
+                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                            data-target="#perfilModal{{ b.id }}" style="background-color: #1098F7; color:white">
                             <i class="fas fa-id-card"></i> Ver Perfil Completo
                         </button>
                     </td>
                 </tr>
 
-                <div class="modal fade" id="perfilModal{{ b.id }}" tabindex="-1" role="dialog" aria-labelledby="label{{ b.id }}" aria-hidden="true">
+                <div class="modal fade" id="perfilModal{{ b.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="label{{ b.id }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header" style="background-color: #1098F7; color:white">
@@ -58,8 +60,10 @@
                                         <p><strong>Patente:</strong> {{ b.patente.nome }}</p>
                                         <p><strong>Data de Ingresso:</strong> {{ b.data_ingresso|date:"d/m/Y" }}</p>
                                         <p><strong>Perfil de Sistema:</strong> {{ b.perfil.nivel }}</p>
-                                        <p><strong>Status Atual:</strong> 
-                                            <span class="badge {% if b.status == 'Ativo' %}badge-success{% else %}badge-warning{% endif %}" style="color:black">
+                                        <p><strong>Status Atual:</strong>
+                                            <span
+                                                class="badge {% if b.status == 'Ativo' %}badge-success{% else %}badge-warning{% endif %}"
+                                                style="color:black">
                                                 {{ b.status }}
                                             </span>
                                         </p>
@@ -75,7 +79,8 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn" data-dismiss="modal" style="background-color: #CA2E55; color:white">Fechar</button>
+                                <button type="button" class="btn" data-dismiss="modal"
+                                    style="background-color: #CA2E55; color:white">Fechar</button>
                             </div>
                         </div>
                     </div>
