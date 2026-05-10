@@ -1,4 +1,4 @@
-from .forms import FormBombeiro
+from .forms import FormEscala
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Bombeiro, Viatura, Ocorrencia, Manutencao, Escala, Evento, Treinamento, Patente, TipoEvento, EscalaBombeiro
@@ -91,39 +91,7 @@ def historico(request):
 def bombeiros(request):
 
     lista = Bombeiro.objects.all().select_related('patente', 'perfil')
-    form = FormBombeiro()
-
-    if request.method == 'POST':
-
-        if 'cadastrar' in request.POST:
-            form = FormBombeiro(request.POST)
-
-            if form.is_valid():
-                form.save()
-
-                return redirect('core_app:bombeiros')
-    
-    elif 'editar' in request.POST:
-        id_bombeiro = request.POST.get('id_bombeiro')
-
-        instancia = get_object_or_404(Bombeiro, id=id_bombeiro)
-        form_editado = FormBombeiro(request.POST, instance=instancia)
-
-        if form_editado.is_valid():
-            form_editado.save()
-
-            return redirect('core_app:bombeiros')
-    
-    elif 'excluir' in request.POST:
-        id_bombeiro = request.POST.get('id_bombeiro')
-
-        instancia = get_object_or_404(Bombeiro, id=id_bombeiro)
-        instancia.delete()
-
-        return redirect('core_app:bombeiros')
-
-
-    return render(request, "bombeiros.html", {'lista': lista, 'form': form})
+    return render(request, "bombeiros.html", {'lista': lista})
 
 
 def manutencoes(request):
@@ -137,5 +105,28 @@ def viaturas(request):
 def escalas(request):
 
     escalas = Escala.objects.all().prefetch_related('escalabombeiro_set__bombeiro')
+    form = FormEscala()
 
-    return render(request, "escala.html", {'escala' : escalas})
+    if request.method == 'POST':
+
+        if 'btn_cadastrar' in request.POST:
+            form = FormEscala(request.POST)
+
+            if form.is_valid():
+                nova_escala = form.save()
+                bombeiros_escolhidos = form.cleaned_data['bombeiros']
+
+                for b in bombeiros_escolhidos:
+                    EscalaBombeiro.objects.create(escala=nova_escala, bombeiro=b)
+                
+                return redirect('core_app:escalas')
+    
+        elif 'btn_excluir' in request.POST:
+
+            id_escala = request.POST.get('id_escala')
+            get_object_or_404(Escala, id=id_escala).delete()
+            return redirect('core_app:escalas')
+
+    return render(request, "escala.html", {
+        'escala': escalas,
+        'form': form})
