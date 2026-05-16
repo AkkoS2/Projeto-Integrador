@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">{{ v.prefixo }}</h5>
-                        <span class="badge {% if v.status == 'Ativa' %}badge-success{% else %}badge-warning{% endif %}">
+                        <span class="badge {% if v.status == 'Ativa' %}badge-success{% else %}badge-warning{% endif %}" style="color:black">
                             {{ v.status }}
                         </span>
                     </div>
@@ -100,7 +100,7 @@
                                     <label>Descrição:</label>
                                     <textarea name="descricao" class="form-control" rows="2" required></textarea>
                                 </div>
-                                <button type="submit" name="btn_manutencao" class="btn btn-block mt-3" >Salvar Registro</button>
+                                <button type="submit" name="btn_manutencao" class="btn btn-block mt-3" style="background-color:#1098F7; color:white">Salvar Registro</button>
                             </form>
                         </div>
                     </div>
