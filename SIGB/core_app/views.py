@@ -1,11 +1,26 @@
-from .forms import FormEscala
 from django.utils import timezone
+from .forms import EscalaForm, ManutencaoForm, BombeiroForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Bombeiro, Viatura, Ocorrencia, Manutencao, Escala, Evento, Treinamento, Patente, TipoEvento, EscalaBombeiro
 
 
 def dashboard(request):
-    return render(request, "dashboard.html")
+
+    total_bombeiros = Bombeiro.objects.count()
+    viaturas_ativas = Viatura.objects.filter(status='Operacional').count()
+    viaturas_manutencao = Viatura.objects.filter(status='Reserva').count()
+    ocorrencias_vivas = Ocorrencia.objects.filter(status='Manutenção').count()
+    escalas = Escala.objects.filter(data_inicio__gte=timezone.now().date())[:5]
+
+    context = {
+        'total_bombeiros': total_bombeiros,
+        'viaturas_ativas': viaturas_ativas,
+        'viaturas_manutencao': viaturas_manutencao,
+        'ocorrencias_vivas': ocorrencias_vivas,
+        'escalas_hoje': escalas
+    }
+
+    return render(request, "dashboard.html", context)
 
 
 def agenda(request):
@@ -91,26 +106,76 @@ def historico(request):
 def bombeiros(request):
 
     lista = Bombeiro.objects.all().select_related('patente', 'perfil')
-    return render(request, "bombeiros.html", {'lista': lista})
+    form = BombeiroForm()
+
+    if request.method == 'POST':
+
+        if 'btn_salvar' in request.POST:
+            id_bombeiro = request.POST.get('id_bombeiro')
+
+            if id_bombeiro:
+                instancia = get_object_or_404(Bombeiro, id=id_bombeiro)
+                form = BombeiroForm(request.POST, instance=instancia)
+            
+            else:
+                form = BombeiroForm(request.POST)
+            
+            if form.is_valid():
+                form.save()
+
+                return redirect('core_app:bombeiros')
+        
+        elif 'btn_excluir' in request.POST:
+            id_bombeiro = request.POST.get('id_bombeiro')
+            bombeiro = get_object_or_404(Bombeiro, id=id_bombeiro)
+            bombeiro.delete()
+
+            return redirect('core_app:bombeiros')
 
 
-def manutencoes(request):
-    return render(request, "manutencoes.html")
+    return render(request, "bombeiros.html", {'lista': lista, 'form': form})
 
 
 def viaturas(request):
-    return render(request, "viaturas.html")
+
+    lista = Viatura.objects.all().prefetch_related('manutencao_set')
+    form = ManutencaoForm()
+
+    if request.method == 'POST':
+
+        if 'btn_manutencao' in request.POST:
+            id_viatura = request.POST.get('id_viatura')
+            viatura_obj = get_object_or_404(Viatura, id=id_viatura)
+            form = ManutencaoForm(request.POST)
+
+            if form.is_valid():
+                nova_manutencao = form.save(commit=False)
+                nova_manutencao.viatura = viatura_obj
+                nova_manutencao.save()
+
+                novo_status = request.POST.get('novo_status_viatura')
+
+                if novo_status:
+                    viatura_obj.status = novo_status
+                    viatura_obj.save()
+
+                return redirect('core_app:viaturas')
+
+    return render(request, "viaturas.html",{
+        'viaturas': lista,
+        'form': form
+    })
 
 
 def escalas(request):
 
     escalas = Escala.objects.all().prefetch_related('escalabombeiro_set__bombeiro')
-    form = FormEscala()
+    form = EscalaForm()
 
     if request.method == 'POST':
 
         if 'btn_cadastrar' in request.POST:
-            form = FormEscala(request.POST)
+            form = EscalaForm(request.POST)
 
             if form.is_valid():
                 nova_escala = form.save()
