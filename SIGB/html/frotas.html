@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Controle de Frota - SIGB{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="text-center mb-4"><i class="fas fa-truck-medical"></i> Controle de Frota</h3>
+
+    <div class="row">
+        {% for v in viaturas %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-top {% if v.status == 'Operacional' %}border-success{% else %}border-warning{% endif %}" style="border-top-width: 5px !important;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ v.prefixo }}</h5>
+                        <span class="badge {% if v.status == 'Ativa' %}badge-success{% else %}badge-warning{% endif %}">
+                            {{ v.status }}
+                        </span>
+                    </div>
+                    <p class="mb-1 text-muted"><strong>{{ v.modelo }}</strong></p>
+                    <p class="mb-1 small">Placa: {{ v.placa }}</p>
+                    <p class="mb-0 small">Tipo: {{ v.tipo }}</p>
+                </div>
+                <div class="card-footer bg-white border-0">
+                    <button class="btn btn-outline-dark btn-sm btn-block" data-toggle="modal" data-target="#modalV{{ v.id }}">
+                        <i class="fas fa-tools"></i> Detalhes / Manutenção
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalV{{ v.id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title">Viatura: {{ v.prefixo }}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Histórico de Manutenções:</h6>
+                        <table class="table table-sm table-bordered">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Início/Fim</th>
+                                    <th>Tipo</th>
+                                    <th>Status</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in v.manutencao_set.all %}
+                                <tr>
+                                    <td><small>{{ m.data_inicio|date:"d/m" }} - {{ m.data_fim|date:"d/m/y" }}</small></td>
+                                    <td>{{ m.tipo }}</td>
+                                    <td><span class="badge badge-secondary" style="color: black">{{ m.status }}</span></td>
+                                    <td><small>{{ m.descricao }}</small></td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center text-muted">Sem histórico.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <hr>
+
+                        <div class="bg-light p-3 rounded">
+                            <h6>Registrar Novo Serviço:</h6>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_viatura" value="{{ v.id }}">
+                                
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Mudar Status da Viatura para:</label>
+                                        <select name="novo_status_viatura" class="form-control">
+                                            <option value="Ativa" {% if v.status == 'Ativa' %}selected{% endif %}>Ativa</option>
+                                            <option value="Em Manutenção" {% if v.status == 'Em Manutenção' %}selected{% endif %}>Em Manutenção</option>
+                                            <option value="Baixada">Baixada</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label>Início:</label>
+                                        <input type="date" name="data_inicio" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label>Fim:</label>
+                                        <input type="date" name="data_fim" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Tipo de Manutenção:</label>
+                                        <input type="text" name="tipo" class="form-control" placeholder="Ex: Motor" required>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label>Status do Serviço:</label>
+                                        <input type="text" name="status" class="form-control" placeholder="Ex: Finalizado" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Descrição:</label>
+                                    <textarea name="descricao" class="form-control" rows="2" required></textarea>
+                                </div>
+                                <button type="submit" name="btn_manutencao" class="btn btn-block mt-3" >Salvar Registro</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

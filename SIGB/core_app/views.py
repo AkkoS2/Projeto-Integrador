@@ -8,8 +8,8 @@ def dashboard(request):
 
     total_bombeiros = Bombeiro.objects.count()
     viaturas_ativas = Viatura.objects.filter(status='Operacional').count()
-    viaturas_manutencao = Viatura.objects.filter(status='Reserva').count()
-    ocorrencias_vivas = Ocorrencia.objects.filter(status='Manutenção').count()
+    viaturas_manutencao = Manutencao.objects.filter(status='Em Andamento').count()
+    ocorrencias_vivas = Ocorrencia.objects.filter(status='Em Atendimento').count()
     escalas = Escala.objects.filter(data_inicio__gte=timezone.now().date())[:5]
 
     context = {
@@ -136,7 +136,7 @@ def bombeiros(request):
     return render(request, "bombeiros.html", {'lista': lista, 'form': form})
 
 
-def viaturas(request):
+def frotas(request):
 
     lista = Viatura.objects.all().prefetch_related('manutencao_set')
     form = ManutencaoForm()
@@ -159,9 +159,9 @@ def viaturas(request):
                     viatura_obj.status = novo_status
                     viatura_obj.save()
 
-                return redirect('core_app:viaturas')
+                return redirect('core_app:frotas')
 
-    return render(request, "viaturas.html",{
+    return render(request, "frotas.html",{
         'viaturas': lista,
         'form': form
     })

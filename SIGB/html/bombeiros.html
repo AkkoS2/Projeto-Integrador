@@ -9,7 +9,8 @@
         <span class="badge badge-primary">{{ lista|length }} Integrantes</span>
     </div>
 
-    <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#modalCadastro">
+    <button type="button" class="btn mb-3" data-toggle="modal" data-target="#modalCadastro"
+        style="background-color:#1098F7; color:white">
         <i class="fas fa-plus"></i> Novo Bombeiro
     </button>
 
@@ -32,13 +33,16 @@
                         </span>
                     </td>
                     <td class="align-middle">
-                        <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#perfilModal{{ b.id }}" title="Ver Perfil">
-                            <i class="fas fa-eye"></i>
+                        <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#perfilModal{{ b.id }}"
+                            title="Ver Perfil" style="background-color: #1098F7;">
+                            <i class="fas fa-eye" style="color:white"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning text-white" data-toggle="modal" data-target="#modalEditar{{ b.id }}" title="Editar">
+                        <button class="btn btn-sm btn-warning text-white" data-toggle="modal"
+                            data-target="#modalEditar{{ b.id }}" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalExcluir{{ b.id }}" title="Excluir">
+                        <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalExcluir{{ b.id }}"
+                            title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -54,117 +58,120 @@
 </div>
 
 {% for b in lista %}
-    
-    <div class="modal fade" id="perfilModal{{ b.id }}" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #1098F7; color:white">
-                    <h5 class="modal-title">Ficha Individual: {{ b.nome_completo }}</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body text-left">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="text-muted border-bottom pb-2">Dados Pessoais</h6>
-                            <p><strong>Nome:</strong> {{ b.nome_completo }}</p>
-                            <p><strong>CPF:</strong> {{ b.cpf }}</p>
-                            <p><strong>Nascimento:</strong> {{ b.data_nascimento|date:"d/m/Y" }}</p>
-                            <p><strong>Tipo Sanguíneo:</strong> {{ b.tipo_sanguineo }}</p>
-                            <p><strong>E-mail:</strong> {{ b.email }}</p>
-                        </div>
-                        <div class="col-md-6 border-left">
-                            <h6 class="text-muted border-bottom pb-2">Informações Militares</h6>
-                            <p><strong>Patente:</strong> {{ b.patente.nome }}</p>
-                            <p><strong>Ingresso:</strong> {{ b.data_ingresso|date:"d/m/Y" }}</p>
-                            <p><strong>Perfil:</strong> {{ b.perfil.nivel }}</p>
-                            <p><strong>Status:</strong> <span class="badge badge-success" style="color:black">{{ b.status }}</span></p>
-                        </div>
+
+<div class="modal fade" id="perfilModal{{ b.id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #1098F7; color:white">
+                <h5 class="modal-title">Ficha Individual: {{ b.nome_completo }}</h5>
+            </div>
+            <div class="modal-body text-left">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-muted border-bottom pb-2">Dados Pessoais</h6>
+                        <p><strong>Nome:</strong> {{ b.nome_completo }}</p>
+                        <p><strong>CPF:</strong> {{ b.cpf }}</p>
+                        <p><strong>Nascimento:</strong> {{ b.data_nascimento|date:"d/m/Y" }}</p>
+                        <p><strong>Tipo Sanguíneo:</strong> {{ b.tipo_sanguineo }}</p>
+                        <p><strong>E-mail:</strong> {{ b.email }}</p>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <p class="bg-light p-2 rounded"><strong>Telefone:</strong> {{ b.telefone }}</p>
-                        </div>
+                    <div class="col-md-6 border-left">
+                        <h6 class="text-muted border-bottom pb-2">Informações Militares</h6>
+                        <p><strong>Patente:</strong> {{ b.patente.nome }}</p>
+                        <p><strong>Ingresso:</strong> {{ b.data_ingresso|date:"d/m/Y" }}</p>
+                        <p><strong>Perfil:</strong> {{ b.perfil.nivel }}</p>
+                        <p><strong>Status:</strong> <span class="badge badge-success" style="color:black">{{ b.status }}</span></p>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn text-white" data-dismiss="modal" style="background-color: #CA2E55;">Fechar</button>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p class="bg-light p-2 rounded"><strong>Telefone:</strong> {{ b.telefone }}</p>
+                    </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="modalEditar{{ b.id }}" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <form method="POST" class="modal-content">
-                {% csrf_token %}
-                <input type="hidden" name="id_bombeiro" value="{{ b.id }}">
-                <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title">Editar: {{ b.nome_completo }}</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body text-left">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="text-muted border-bottom pb-2">Dados Pessoais</h6>
-                            <label class="small font-weight-bold">Nome Completo</label>
-                            <input type="text" name="nome_completo" value="{{ b.nome_completo }}" class="form-control mb-2">
-                            <label class="small font-weight-bold">CPF</label>
-                            <input type="text" name="cpf" value="{{ b.cpf }}" class="form-control mb-2">
-                            <label class="small font-weight-bold">Nascimento</label>
-                            <input type="date" name="data_nascimento" value="{{ b.data_nascimento|date:'Y-m-d' }}" class="form-control mb-2">
-                            <label class="small font-weight-bold">E-mail</label>
-                            <input type="email" name="email" value="{{ b.email }}" class="form-control mb-2">
-                        </div>
-                        <div class="col-md-6 border-left">
-                            <h6 class="text-muted border-bottom pb-2">Informações Militares</h6>
-                            <label class="small font-weight-bold">Patente</label>
-                            <select name="patente" class="form-control mb-2">
-                                {% for p in form.fields.patente.queryset %}
-                                    <option value="{{ p.id }}" {% if p.id == b.patente.id %}selected{% endif %}>{{ p.nome }}</option>
-                                {% endfor %}
-                            </select>
-                            <label class="small font-weight-bold">Ingresso</label>
-                            <input type="date" name="data_ingresso" value="{{ b.data_ingresso|date:'Y-m-d' }}" class="form-control mb-2">
-                            <label class="small font-weight-bold">Status</label>
-                            <input type="text" name="status" value="{{ b.status }}" class="form-control mb-2">
-                        </div>
+<div class="modal fade" id="modalEditar{{ b.id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form method="POST" class="modal-content">
+            {% csrf_token %}
+            <input type="hidden" name="id_bombeiro" value="{{ b.id }}">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title">Editar: {{ b.nome_completo }}</h5>
+            </div>
+            <div class="modal-body text-left">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-muted border-bottom pb-2">Dados Pessoais</h6>
+                        <label class="small font-weight-bold">Nome Completo</label>
+                        <input type="text" name="nome_completo" value="{{ b.nome_completo }}" class="form-control mb-2">
+                        <label class="small font-weight-bold">CPF</label>
+                        <input type="text" name="cpf" value="{{ b.cpf }}" class="form-control mb-2">
+                        <label class="small font-weight-bold">Nascimento</label>
+                        <input type="date" name="data_nascimento" value="{{ b.data_nascimento|date:'Y-m-d' }}"
+                            class="form-control mb-2">
+                        <label class="small font-weight-bold">E-mail</label>
+                        <input type="email" name="email" value="{{ b.email }}" class="form-control mb-2">
                     </div>
-                    <label class="small font-weight-bold mt-2">Telefone</label>
-                    <input type="text" name="telefone" value="{{ b.telefone }}" class="form-control">
+                    <div class="col-md-6 border-left">
+                        <h6 class="text-muted border-bottom pb-2">Informações Militares</h6>
+                        <label class="small font-weight-bold">Patente</label>
+                        <select name="patente" class="form-control mb-2">
+                            {% for p in form.fields.patente.queryset %}
+                            <option value="{{ p.id }}" {% if p.id == b.patente.id %}selected{% endif %}>{{ p.nome }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <label class="small font-weight-bold">Ingresso</label>
+                        <input type="date" name="data_ingresso" value="{{ b.data_ingresso|date:'Y-m-d' }}"
+                            class="form-control mb-2">
+                        <label class="small font-weight-bold">Status</label>
+                        <input type="text" name="status" value="{{ b.status }}" class="form-control mb-2">
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" name="btn_salvar" class="btn btn-warning text-white">Salvar Alterações</button>
-                </div>
-            </form>
-        </div>
+                <label class="small font-weight-bold mt-2">Telefone</label>
+                <input type="text" name="telefone" value="{{ b.telefone }}" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" name="btn_salvar" class="btn"
+                    style="background-color: #1098F7; color:white">Salvar Alterações</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div class="modal fade" id="modalExcluir{{ b.id }}" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
-            <form method="POST" class="modal-content">
-                {% csrf_token %}
-                <input type="hidden" name="id_bombeiro" value="{{ b.id }}">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Confirmar Exclusão</h5>
-                </div>
-                <div class="modal-body text-center">
-                    Tem certeza que deseja excluir o registro de<br>
-                    <strong>{{ b.nome_completo }}</strong>?
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" name="btn_excluir" class="btn btn-danger">Sim, Excluir</button>
-                </div>
-            </form>
-        </div>
+<div class="modal fade" id="modalExcluir{{ b.id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="POST" class="modal-content">
+            {% csrf_token %}
+            <input type="hidden" name="id_bombeiro" value="{{ b.id }}">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirmar Exclusão</h5>
+            </div>
+            <div class="modal-body text-center">
+                Tem certeza que deseja excluir o registro de<br>
+                <strong>{{ b.nome_completo }}</strong>?
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn" data-dismiss="modal"
+                    style="background-color: #1098F7; color:white">Cancelar</button>
+                <button type="submit" name="btn_excluir" class="btn btn-danger">Sim, Excluir</button>
+            </div>
+        </form>
     </div>
+</div>
 {% endfor %}
 
 <div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <form method="POST" class="modal-content">
             {% csrf_token %}
-            <div class="modal-header bg-success text-white">
+            <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title">Novo Cadastro de Bombeiro</h5>
             </div>
             <div class="modal-body text-left">
@@ -183,7 +190,8 @@
                 <label class="small font-weight-bold mt-2">Telefone</label>{{ form.telefone }}
             </div>
             <div class="modal-footer">
-                <button type="submit" name="btn_salvar" class="btn btn-success">Salvar Cadastro</button>
+                <button type="submit" name="btn_salvar" class="btn" style="background-color:#1098F7; color:white">Salvar
+                    Cadastro</button>
             </div>
         </form>
     </div>

@@ -21,10 +21,11 @@
         <div class="tab-pane fade show active" id="futuros">
             <div class="list-group">
                 {% for e in evento %}
-                <div class="list-group-item list-group-item-action border-left border-primary" style="border-left-width: 5px !important;">
+                <div class="list-group-item list-group-item-action border-left border-primary"
+                    style="border-left-width: 5px !important;">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1 text-primary">{{ e.titulo }}</h5>
-                        <small class="badge badge-primary"  style="color:black;">{{ e.data_inicio|date:"d/m H:i" }}</small>
+                        <small class="badge badge-primary" style="color:black;">{{ e.data_inicio|date:"d/m H:i" }}</small>
                     </div>
                     <p class="mb-1">{{ e.descricao }}</p>
                 </div>
@@ -37,10 +38,11 @@
         <div class="tab-pane fade" id="abertas">
             <div class="list-group">
                 {% for o in aberto %}
-                <div class="list-group-item list-group-item-danger shadow-sm mb-2" style="border-left: 5px solid #dc3545;">
+                <div class="list-group-item list-group-item-danger shadow-sm mb-2"
+                    style="border-left: 5px solid #dc3545;">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1"><i class="fas fa-exclamation-triangle"></i> {{ o.tipo }}</h5>
-                        <span class="badge badge-warning"  style="color:black;">Gravidade: {{ o.gravidade }}</span>
+                        <span class="badge badge-warning" style="color:black;">Gravidade: {{ o.gravidade }}</span>
                     </div>
                     <p class="mb-1">{{ o.descricao }}</p>
                     <small>Vítimas: {{ o.vitimas|default:"Sem informação" }} | ID: #{{ o.id }}</small>
